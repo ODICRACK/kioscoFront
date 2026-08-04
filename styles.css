@@ -187,6 +187,7 @@ body {
     margin-bottom: 15px;
     border-radius: 5px;
     color: #333;
+    flex-wrap: wrap
 }
 
 .filtros-controles {
@@ -207,7 +208,7 @@ body {
 }
 
 .recaudacion-box {
-    font-size: 2vw;
+    font-size: 1.5rem;
     font-weight: bold;
     background-color: #b9f6ca;
     /* Verde claro para resaltar el dinero */
