@@ -1,5 +1,5 @@
 * { box-sizing: border-box; font-family: Arial, sans-serif; }
-body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; height: 100vh;}
+body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; height: 100vh; overflow: hidden; /* Evita cualquier scroll no deseado en el nivel más alto */ }
 
 /* TEMAS DE TURNOS */
 .shift-manana { background-color: #fffde7; color: #333; }
@@ -9,8 +9,8 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
 .shift-tarde button, .shift-noche button { background-color: #444; color: #fff; }
 .shift-manana button { background-color: #e0e0e0; color: #000; }
 
-/* MANEJO DE VISTAS */
-.view { display: none; height: 100%; padding: 20px; }
+/* MANEJO DE VISTAS GENERALES */
+.view { display: none; height: 100vh; padding: 20px; overflow-y: auto; /* Permite scroll en vistas como Stock o Catálogo si se llenan */ }
 .view.active { display: block; }
 
 .btn-back { margin-bottom: 20px; font-size: 1.5rem; padding: 5px 15px; }
@@ -19,11 +19,31 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
 .menu-container { display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; height: 80vh; }
 .menu-container button { padding: 20px; width: 200px; font-size: 1.2rem; }
 
-/* VISTA VENTA */
-.turnos-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+/* --- AJUSTES ESPECÍFICOS VISTA VENTA --- */
+#view-venta.active { 
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh; 
+    padding: 10px; /* Reducido para aprovechar la pantalla */
+    overflow: hidden; /* Cortamos cualquier scroll de toda la pantalla */
+}
+
+/* Achicamos el margen del botón volver solo en la vista de venta */
+#view-venta .btn-back { 
+    margin-bottom: 5px; 
+    align-self: flex-start; 
+}
+
+.turnos-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
 .turnos-container button { padding: 10px 20px; }
 
-.pos-layout { display: flex; height: 60vh; gap: 10px; }
+/* El layout principal toma todo el espacio sobrante con flex: 1 */
+.pos-layout { 
+    display: flex; 
+    flex: 1; 
+    min-height: 0; /* Fundamental para que el scroll funcione dentro de este contenedor */
+    gap: 10px; 
+}
 
 .categorias-col { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
 .productos-col { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; align-content: start; }
@@ -37,11 +57,19 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
-    background-color: #d3d3d3; /* Fondo base para botones según mockup */
-    color: #000; /* Siempre oscuro para contraste en los botones */
+    background-color: #d3d3d3;
+    color: #000;
 }
 
-.footer-venta { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 10px; border-top: 2px solid #ccc; }
+.footer-venta { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 10px; 
+    padding-top: 10px; 
+    border-top: 2px solid #ccc; 
+}
+
 .pagos button { padding: 10px; margin-right: 10px; border: 2px solid transparent;}
 .pagos button.selected { border-color: #00e676; background-color: #b9f6ca; color: #000;}
 .total-display { font-size: 2rem; font-weight: bold; }
