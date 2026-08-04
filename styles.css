@@ -20,8 +20,29 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
 .menu-container button { padding: 20px; width: 200px; font-size: 1.2rem; }
 
 /* VISTA VENTA */
-.turnos-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-.turnos-container button { padding: 10px 20px; }
+.turnos-container { 
+    display: flex; 
+    justify-content: space-between; /* Separa los botones a los extremos */
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.turnos-botones {
+    display: flex;
+    gap: 10px;
+}
+
+/* Hacemos los botones de turno más chicos */
+.turnos-botones button { 
+    padding: 6px 12px; /* Reducido de 10px 20px */
+    font-size: 0.9rem; /* Letra ligeramente más pequeña */
+}
+
+/* Estilo para los botones de acción (Deshacer y Limpiar) */
+.turnos-container > button {
+    padding: 8px 15px;
+    cursor: pointer;
+}
 
 .pos-layout { display: flex; height: 60vh; gap: 10px; }
 
