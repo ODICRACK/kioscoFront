@@ -153,7 +153,7 @@ async function cargarHistorialVentas() {
 async function cargarVistaStock() {
     try {
         // Usamos un endpoint diferente para traer TODO, incluso sin stock
-        const res = await fetch('http://localhost:3000/api/stock-completo');
+        const res = await fetch(`${API_URL}/api/stock-completo`);
         const data = await res.json();
         renderizarListaStock(data.categorias, data.productos);
     } catch (error) {
@@ -213,7 +213,7 @@ async function crearCategoria() {
     const colores = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FFF333'];
     const color = colores[Math.floor(Math.random() * colores.length)];
 
-    await fetch('http://localhost:3000/api/categorias', {
+    await fetch(`${API_URL}/api/categorias`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, color })
@@ -229,7 +229,7 @@ async function crearProducto() {
 
     if (!catId || !nombre || !precio) return;
 
-    await fetch('http://localhost:3000/api/productos', {
+    await fetch(`${API_URL}/api/productos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ categoria_id: parseInt(catId), nombre, precio: parseFloat(precio), stock: parseInt(stock) || 0 })
@@ -238,7 +238,7 @@ async function crearProducto() {
 }
 
 async function actualizarProducto(id, campo, valor) {
-    await fetch(`http://localhost:3000/api/productos/${id}`, {
+    await fetch(`${API_URL}/api/productos/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ campo, valor })
