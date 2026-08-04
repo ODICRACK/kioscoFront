@@ -4,6 +4,7 @@ let metodoPagoActual = null;
 let total = 0;
 let datosCatalogo = { categorias: [], productos: [] };
 let categoriasStock = [];
+let historialAgregados = [];
 
 const API_URL = "https://kioscoback.onrender.com";
 
@@ -76,6 +77,8 @@ function renderProductos(categoriaId, colorCategoria) {
 }
 
 function agregarAlCarrito(producto) {
+    historialAgregados.push(producto.id); // <-- GUARDAMOS EL CLIC EN EL HISTORIAL
+    
     const existe = carrito.find(item => item.id === producto.id);
     if (existe) {
         existe.cantidad += 1;
@@ -129,11 +132,32 @@ async function procesarVenta() {
 
 function limpiarVenta() {
     carrito = [];
+    historialAgregados = [];
     metodoPagoActual = null;
     actualizarTotal();
     document.getElementById('productos-container').innerHTML = ''; // Limpia lista
     document.getElementById('btn-transferencia').classList.remove('selected');
     document.getElementById('btn-efectivo').classList.remove('selected');
+}
+function eliminarUltimo() {
+    if (historialAgregados.length === 0) return; // Si no hay nada, no hace nada
+
+    // 1. Sacamos el último ID que se tocó
+    const ultimoId = historialAgregados.pop();
+    
+    // 2. Lo buscamos en el carrito
+    const itemIndex = carrito.findIndex(item => item.id === ultimoId);
+    
+    if (itemIndex !== -1) {
+        carrito[itemIndex].cantidad -= 1; // Le restamos 1 unidad
+        
+        // 3. Si la cantidad llega a 0, lo eliminamos completamente de la compra
+        if (carrito[itemIndex].cantidad === 0) {
+            carrito.splice(itemIndex, 1);
+        }
+    }
+    
+    actualizarTotal();
 }
 
 // --- LÓGICA VISTA CATÁLOGO ---
