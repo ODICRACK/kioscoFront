@@ -1,30 +1,82 @@
-* { box-sizing: border-box; font-family: Arial, sans-serif; }
-body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; height: 100vh;}
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+    height: 100vh;
+}
 
 /* TEMAS DE TURNOS */
-.shift-manana { background-color: #fffde7; color: #333; }
-.shift-tarde { background-color: #5d4037; color: #f5f5f5; }
-.shift-noche { background-color: #121212; color: #e0e0e0; }
+.shift-manana {
+    background-color: #fffde7;
+    color: #333;
+}
 
-.shift-tarde button, .shift-noche button { background-color: #444; color: #fff; }
-.shift-manana button { background-color: #e0e0e0; color: #000; }
+.shift-tarde {
+    background-color: #5d4037;
+    color: #f5f5f5;
+}
+
+.shift-noche {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.shift-tarde button,
+.shift-noche button {
+    background-color: #444;
+    color: #fff;
+}
+
+.shift-manana button {
+    background-color: #e0e0e0;
+    color: #000;
+}
 
 /* MANEJO DE VISTAS */
-.view { display: none; height: 100%; padding: 20px; }
-.view.active { display: block; }
+.view {
+    display: none;
+    height: 100%;
+    padding: 20px;
+}
 
-.btn-back { margin-bottom: 20px; font-size: 1.5rem; padding: 5px 15px; }
+.view.active {
+    display: block;
+}
+
+.btn-back {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    padding: 5px 15px;
+}
 
 /* VISTA HOME */
-.menu-container { display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; height: 80vh; }
-.menu-container button { padding: 20px; width: 200px; font-size: 1.2rem; }
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.menu-container button {
+    padding: 20px;
+    width: 200px;
+    font-size: 1.2rem;
+}
 
 /* VISTA VENTA */
-.turnos-container { 
-    display: flex; 
-    justify-content: space-between; /* Separa los botones a los extremos */
-    align-items: center; 
-    margin-bottom: 10px; 
+.turnos-container {
+    display: flex;
+    justify-content: space-between;
+    /* Separa los botones a los extremos */
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .turnos-botones {
@@ -33,41 +85,134 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
 }
 
 /* Hacemos los botones de turno más chicos */
-.turnos-botones button { 
-    padding: 6px 12px; /* Reducido de 10px 20px */
-    font-size: 0.9rem; /* Letra ligeramente más pequeña */
+.turnos-botones button {
+    padding: 6px 12px;
+    /* Reducido de 10px 20px */
+    font-size: 0.9rem;
+    /* Letra ligeramente más pequeña */
 }
 
 /* Estilo para los botones de acción (Deshacer y Limpiar) */
-.turnos-container > button {
+.turnos-container>button {
     padding: 8px 15px;
     cursor: pointer;
 }
 
-.pos-layout { display: flex; height: 60vh; gap: 10px; }
+.pos-layout {
+    display: flex;
+    height: 60vh;
+    gap: 10px;
+}
 
-.categorias-col { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
-.productos-col { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; align-content: start; }
+.categorias-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.productos-col {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    overflow-y: auto;
+    align-content: start;
+}
 
 /* Estilos de botones de categoría/producto */
-.cat-btn, .prod-btn {
+.cat-btn,
+.prod-btn {
     padding: 15px;
     font-size: 1.2rem;
     font-weight: bold;
-    border: 2px solid; 
+    border: 2px solid;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
-    background-color: #d3d3d3; /* Fondo base para botones según mockup */
-    color: #000; /* Siempre oscuro para contraste en los botones */
+    background-color: #d3d3d3;
+    /* Fondo base para botones según mockup */
+    color: #000;
+    /* Siempre oscuro para contraste en los botones */
 }
 
-.footer-venta { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 10px; border-top: 2px solid #ccc; }
-.pagos button { padding: 10px; margin-right: 10px; border: 2px solid transparent;}
-.pagos button.selected { border-color: #00e676; background-color: #b9f6ca; color: #000;}
-.total-display { font-size: 2rem; font-weight: bold; }
-.btn-venta-final { background-color: #00e676 !important; color: black !important; font-size: 1.5rem; padding: 15px 40px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+.footer-venta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 2px solid #ccc;
+}
 
-#view-venta{
+.pagos button {
+    padding: 10px;
+    margin-right: 10px;
+    border: 2px solid transparent;
+}
+
+.pagos button.selected {
+    border-color: #00e676;
+    background-color: #b9f6ca;
+    color: #000;
+}
+
+.total-display {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.btn-venta-final {
+    background-color: #00e676 !important;
+    color: black !important;
+    font-size: 1.5rem;
+    padding: 15px 40px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#view-venta {
     height: 40vw;
+}
+
+/* --- ESTILOS FILTROS CATÁLOGO --- */
+.filtros-catalogo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e0e0e0;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    color: #333;
+}
+
+.filtros-controles {
+    display: flex;
+    gap: 20px;
+}
+
+.filtros-controles label {
+    font-weight: bold;
+}
+
+.filtros-controles input,
+.filtros-controles select {
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.recaudacion-box {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: #b9f6ca;
+    /* Verde claro para resaltar el dinero */
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #000;
+    border: 2px solid #00e676;
 }

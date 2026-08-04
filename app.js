@@ -5,6 +5,7 @@ let total = 0;
 let datosCatalogo = { categorias: [], productos: [] };
 let categoriasStock = [];
 let historialAgregados = [];
+let todasLasVentas = [];
 
 const API_URL = "https://kioscoback.onrender.com";
 
@@ -14,7 +15,7 @@ function navigate(viewId) {
     document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
     // 2. Mostramos la vista solicitada
     document.getElementById(viewId).classList.add('active');
-    
+
     // 3. Cargamos los datos dependiendo de a dónde entramos
     if (viewId === 'view-venta') {
         cargarCatalogo();
@@ -47,7 +48,7 @@ async function cargarCatalogo() {
 function renderCategorias() {
     const container = document.getElementById('categorias-container');
     container.innerHTML = '';
-    
+
     datosCatalogo.categorias.forEach(cat => {
         const btn = document.createElement('div');
         btn.className = 'cat-btn';
@@ -62,9 +63,9 @@ function renderCategorias() {
 function renderProductos(categoriaId, colorCategoria) {
     const container = document.getElementById('productos-container');
     container.innerHTML = '';
-    
+
     const filtrados = datosCatalogo.productos.filter(p => p.categoria_id === categoriaId);
-    
+
     filtrados.forEach(prod => {
         const btn = document.createElement('div');
         btn.className = 'prod-btn';
@@ -78,7 +79,7 @@ function renderProductos(categoriaId, colorCategoria) {
 
 function agregarAlCarrito(producto) {
     historialAgregados.push(producto.id); // <-- GUARDAMOS EL CLIC EN EL HISTORIAL
-    
+
     const existe = carrito.find(item => item.id === producto.id);
     if (existe) {
         existe.cantidad += 1;
@@ -117,7 +118,7 @@ async function procesarVenta() {
         });
 
         const data = await res.json();
-        
+
         if (data.success) {
             alert('Venta realizada exitosamente');
             limpiarVenta();
@@ -144,43 +145,97 @@ function eliminarUltimo() {
 
     // 1. Sacamos el último ID que se tocó
     const ultimoId = historialAgregados.pop();
-    
+
     // 2. Lo buscamos en el carrito
     const itemIndex = carrito.findIndex(item => item.id === ultimoId);
-    
+
     if (itemIndex !== -1) {
         carrito[itemIndex].cantidad -= 1; // Le restamos 1 unidad
-        
+
         // 3. Si la cantidad llega a 0, lo eliminamos completamente de la compra
         if (carrito[itemIndex].cantidad === 0) {
             carrito.splice(itemIndex, 1);
         }
     }
-    
+
     actualizarTotal();
 }
 
 // --- LÓGICA VISTA CATÁLOGO ---
+// --- LÓGICA VISTA CATÁLOGO ---
 async function cargarHistorialVentas() {
     try {
         const res = await fetch(`${API_URL}/api/ventas`);
-        const ventas = await res.json();
-        const tbody = document.querySelector('#tabla-ventas tbody');
-        tbody.innerHTML = '';
+        todasLasVentas = await res.json();
 
-        ventas.forEach(v => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${v.turno}</td>
-                <td>$${v.total}</td>
-                <td>${new Date(v.fecha_hora).toLocaleString()}</td>
-                <td>${v.metodo_pago}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+        // 1. Seteamos el calendario en el "Día de Hoy" por defecto al entrar
+        const inputFecha = document.getElementById('filtro-fecha');
+        if (!inputFecha.value) {
+            const hoy = new Date();
+            const anio = hoy.getFullYear();
+            const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoy.getDate()).padStart(2, '0');
+            inputFecha.value = `${anio}-${mes}-${dia}`; // Formato que usa el <input type="date">
+        }
+
+        // 2. Filtramos y mostramos usando esa fecha
+        filtrarCatalogo();
     } catch (error) {
         console.error("Error al cargar historial", error);
     }
+}
+
+function filtrarCatalogo() {
+    const fechaSeleccionada = document.getElementById('filtro-fecha').value;
+    const turnoSeleccionado = document.getElementById('filtro-turno').value;
+
+    let ventasFiltradas = todasLasVentas;
+
+    // 1. Filtrar por Día exacto
+    if (fechaSeleccionada) {
+        ventasFiltradas = ventasFiltradas.filter(v => {
+            const fechaVenta = new Date(v.fecha_hora);
+            const anio = fechaVenta.getFullYear();
+            const mes = String(fechaVenta.getMonth() + 1).padStart(2, '0');
+            const dia = String(fechaVenta.getDate()).padStart(2, '0');
+            const fechaFormateada = `${anio}-${mes}-${dia}`;
+
+            return fechaFormateada === fechaSeleccionada;
+        });
+    }
+
+    // 2. Filtrar por Turno (si no está en "Todo el día")
+    if (turnoSeleccionado !== 'todo') {
+        ventasFiltradas = ventasFiltradas.filter(v => v.turno === turnoSeleccionado);
+    }
+
+    renderizarTablaVentas(ventasFiltradas);
+}
+
+function renderizarTablaVentas(ventas) {
+    const tbody = document.querySelector('#tabla-ventas tbody');
+    tbody.innerHTML = '';
+
+    let totalRecaudado = 0;
+
+    ventas.forEach(v => {
+        // Sumar al total general
+        totalRecaudado += parseFloat(v.total);
+
+        // Crear la fila
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = "1px solid #ccc";
+        tr.innerHTML = `
+            <td style="padding: 10px;">${v.turno}</td>
+            <td style="padding: 10px; font-weight: bold;">$${v.total}</td>
+            <td style="padding: 10px;">${new Date(v.fecha_hora).toLocaleString()}</td>
+            <td style="padding: 10px;">${v.metodo_pago}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Actualizar el número verde gigante con el dinero recaudado
+    document.getElementById('total-recaudado').textContent = totalRecaudado;
 }
 
 // --- LÓGICA VISTA STOCK ---
@@ -214,7 +269,7 @@ function navigate(viewId) {
 
 function renderizarListaStock(categorias, productos) {
     const container = document.getElementById('contenedor-stock-list');
-    container.innerHTML = ''; 
+    container.innerHTML = '';
 
     categorias.forEach(cat => {
         const tituloCat = document.createElement('h3');
@@ -223,7 +278,7 @@ function renderizarListaStock(categorias, productos) {
         container.appendChild(tituloCat);
 
         const prods = productos.filter(p => p.categoria_id === cat.id);
-        
+
         prods.forEach(prod => {
             const fila = document.createElement('div');
             fila.className = 'stock-row';
@@ -247,7 +302,7 @@ function renderizarListaStock(categorias, productos) {
 async function crearCategoria() {
     const nombre = prompt("Nombre de la nueva categoría:");
     if (!nombre) return;
-    
+
     // Asignamos un color aleatorio o predefinido para la categoría
     const colores = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FFF333'];
     const color = colores[Math.floor(Math.random() * colores.length)];
@@ -263,10 +318,10 @@ async function crearCategoria() {
 async function crearProducto() {
     // 1. Armamos un texto dinámico con las opciones (ej: "1: Gomitas \n 2: Galletitas")
     const listaOpciones = categoriasStock.map(c => `${c.id}: ${c.nombre}`).join('\n');
-    
+
     // 2. Se lo mostramos al usuario en el prompt
     const catId = prompt(`¿A qué categoría pertenece? Ingresa el NÚMERO:\n\n${listaOpciones}`);
-    
+
     if (!catId) return; // Si el usuario cancela, detenemos la función
 
     const nombre = prompt("Nombre del producto:");
@@ -278,14 +333,14 @@ async function crearProducto() {
     await fetch(`${API_URL}/api/productos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            categoria_id: parseInt(catId), 
-            nombre, 
-            precio: parseFloat(precio), 
-            stock: parseInt(stock) || 0 
+        body: JSON.stringify({
+            categoria_id: parseInt(catId),
+            nombre,
+            precio: parseFloat(precio),
+            stock: parseInt(stock) || 0
         })
     });
-    
+
     cargarVistaStock(); // Recargamos para ver el nuevo producto
 }
 
@@ -300,7 +355,7 @@ async function actualizarProducto(id, campo, valor) {
 
 async function eliminarProducto(id) {
     if (!confirm('¿Seguro que deseas eliminar este producto/promo del sistema?')) return;
-    
+
     await fetch(`${API_URL}/api/productos/${id}`, {
         method: 'DELETE'
     });
@@ -310,21 +365,21 @@ async function eliminarProducto(id) {
 async function crearPromo() {
     const nombre = prompt("Nombre de la promoción (Ej: Promo 2 Jugos + Galleta):");
     if (!nombre) return;
-    
+
     const precio = prompt("Precio total al que se venderá la promoción:");
     if (!precio) return;
 
     let componentes = [];
     let agregando = true;
-    
+
     // Obtenemos la lista actual de productos para mostrársela al usuario
     const res = await fetch(`${API_URL}/api/stock-completo`);
     const data = await res.json();
     const listaProds = data.productos.map(p => `${p.id}: ${p.nombre}`).join('\n');
 
-    while(agregando) {
+    while (agregando) {
         const prodId = prompt(`Ingresa el NÚMERO del producto para añadir a la promo (deja vacío cuando termines):\n\n${listaProds}`);
-        
+
         if (!prodId) {
             if (componentes.length >= 2) {
                 agregando = false; // Termina de agregar
@@ -334,7 +389,7 @@ async function crearPromo() {
             }
         } else {
             const cant = prompt(`¿Qué CANTIDAD de este producto incluye la promo?`);
-            if(cant) componentes.push({ id: parseInt(prodId), cantidad: parseInt(cant) });
+            if (cant) componentes.push({ id: parseInt(prodId), cantidad: parseInt(cant) });
         }
     }
 
@@ -342,10 +397,10 @@ async function crearPromo() {
         await fetch(`${API_URL}/api/promos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                nombre, 
-                precio: parseFloat(precio), 
-                componentes 
+            body: JSON.stringify({
+                nombre,
+                precio: parseFloat(precio),
+                componentes
             })
         });
         alert("¡Promoción creada exitosamente!");

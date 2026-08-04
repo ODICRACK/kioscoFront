@@ -40,6 +40,46 @@
     </div>
 
     <!-- VISTA CATALOGO -->
+    <!-- VISTA CATALOGO -->
+    <div id="view-catalogo" class="view">
+        <button class="btn-back" onclick="navigate('view-home')">←</button>
+
+        <!-- NUEVO: Panel de filtros y recaudación -->
+        <div class="filtros-catalogo">
+            <div class="filtros-controles">
+                <div>
+                    <label>Día: </label>
+                    <input type="date" id="filtro-fecha" onchange="filtrarCatalogo()">
+                </div>
+                <div>
+                    <label>Turno: </label>
+                    <select id="filtro-turno" onchange="filtrarCatalogo()">
+                        <option value="todo">Todo el día</option>
+                        <option value="manana">Mañana</option>
+                        <option value="tarde">Tarde</option>
+                        <option value="noche">Noche</option>
+                    </select>
+                </div>
+            </div>
+            <div class="recaudacion-box">
+                Recaudado: $<span id="total-recaudado">0</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="tabla-ventas" style="width: 100%; text-align: left; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #ccc; background: #eee; color: #333;">
+                        <th style="padding: 10px;">Turno</th>
+                        <th style="padding: 10px;">Monto</th>
+                        <th style="padding: 10px;">Fecha y Hora</th>
+                        <th style="padding: 10px;">Medio</th>
+                    </tr>
+                </thead>
+                <tbody><!-- Llenado por JS --></tbody>
+            </table>
+        </div>
+    </div>
     <div id="view-catalogo" class="view">
         <button class="btn-back" onclick="navigate('view-home')">←</button>
         <div class="table-container">
