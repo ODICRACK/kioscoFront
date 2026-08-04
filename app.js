@@ -123,6 +123,7 @@ async function procesarVenta() {
         }
     } catch (error) {
         alert('Error de conexión con el servidor');
+        console.error(error)
     }
 }
 
