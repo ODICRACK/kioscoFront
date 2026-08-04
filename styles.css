@@ -10,7 +10,7 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
 .shift-manana button { background-color: #e0e0e0; color: #000; }
 
 /* MANEJO DE VISTAS */
-.view { display: none; height: 30%; padding: 20px; }
+.view { display: none; height: 100%; padding: 20px; }
 .view.active { display: block; }
 
 .btn-back { margin-bottom: 20px; font-size: 1.5rem; padding: 5px 15px; }
