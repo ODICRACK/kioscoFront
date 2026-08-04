@@ -3,6 +3,7 @@ let turnoActual = 'manana';
 let metodoPagoActual = null;
 let total = 0;
 let datosCatalogo = { categorias: [], productos: [] };
+let categoriasStock = [];
 
 const API_URL = "https://kioscoback.onrender.com";
 
@@ -165,6 +166,9 @@ async function cargarVistaStock() {
         // Usamos un endpoint diferente para traer TODO, incluso sin stock
         const res = await fetch(`${API_URL}/api/stock-completo`);
         const data = await res.json();
+
+        categoriasStock = data.categorias; // <--- AGREGA ESTA LÍNEA
+
         renderizarListaStock(data.categorias, data.productos);
     } catch (error) {
         console.error("Error al cargar stock", error);
@@ -232,19 +236,32 @@ async function crearCategoria() {
 }
 
 async function crearProducto() {
-    const catId = prompt("ID de la categoría a la que pertenece (Ej: 1):");
+    // 1. Armamos un texto dinámico con las opciones (ej: "1: Gomitas \n 2: Galletitas")
+    const listaOpciones = categoriasStock.map(c => `${c.id}: ${c.nombre}`).join('\n');
+    
+    // 2. Se lo mostramos al usuario en el prompt
+    const catId = prompt(`¿A qué categoría pertenece? Ingresa el NÚMERO:\n\n${listaOpciones}`);
+    
+    if (!catId) return; // Si el usuario cancela, detenemos la función
+
     const nombre = prompt("Nombre del producto:");
     const precio = prompt("Precio de venta:");
     const stock = prompt("Stock inicial:");
 
-    if (!catId || !nombre || !precio) return;
+    if (!nombre || !precio) return;
 
     await fetch(`${API_URL}/api/productos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ categoria_id: parseInt(catId), nombre, precio: parseFloat(precio), stock: parseInt(stock) || 0 })
+        body: JSON.stringify({ 
+            categoria_id: parseInt(catId), 
+            nombre, 
+            precio: parseFloat(precio), 
+            stock: parseInt(stock) || 0 
+        })
     });
-    cargarVistaStock();
+    
+    cargarVistaStock(); // Recargamos para ver el nuevo producto
 }
 
 async function actualizarProducto(id, campo, valor) {
