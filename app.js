@@ -8,11 +8,21 @@ const API_URL = "https://kioscoback.onrender.com";
 
 // --- NAVEGACIÓN ---
 function navigate(viewId) {
+    // 1. Ocultamos todas las vistas
     document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+    // 2. Mostramos la vista solicitada
     document.getElementById(viewId).classList.add('active');
     
-    if (viewId === 'view-venta') cargarCatalogo();
-    if (viewId === 'view-catalogo') cargarHistorialVentas();
+    // 3. Cargamos los datos dependiendo de a dónde entramos
+    if (viewId === 'view-venta') {
+        cargarCatalogo();
+    }
+    if (viewId === 'view-catalogo') {
+        cargarHistorialVentas();
+    }
+    if (viewId === 'view-stock') {
+        cargarVistaStock(); // <-- Esta es la línea clave que faltaba ejecutar al entrar
+    }
 }
 
 // --- LÓGICA VISTA VENTA ---
