@@ -4,6 +4,8 @@ let metodoPagoActual = null;
 let total = 0;
 let datosCatalogo = { categorias: [], productos: [] };
 
+const API_URL = "https://kiosco-backend.onrender.com";
+
 // --- NAVEGACIÓN ---
 function navigate(viewId) {
     document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
@@ -22,7 +24,7 @@ function setShift(shift) {
 
 async function cargarCatalogo() {
     try {
-        const res = await fetch('http://localhost:3000/api/catalogo-actual');
+        const res = await fetch(`${API_URL}/api/catalogo-actual`);
         datosCatalogo = await res.json();
         renderCategorias();
     } catch (error) {
@@ -89,7 +91,7 @@ async function procesarVenta() {
     if (!metodoPagoActual) return alert('Selecciona un método de pago');
 
     try {
-        const res = await fetch('http://localhost:3000/api/ventas', {
+        const res = await fetch(`${API_URL}}/api/ventas`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -125,7 +127,7 @@ function limpiarVenta() {
 // --- LÓGICA VISTA CATÁLOGO ---
 async function cargarHistorialVentas() {
     try {
-        const res = await fetch('http://localhost:3000/api/ventas');
+        const res = await fetch(`${API_URL}}/api/ventas`);
         const ventas = await res.json();
         const tbody = document.querySelector('#tabla-ventas tbody');
         tbody.innerHTML = '';
