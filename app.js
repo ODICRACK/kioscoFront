@@ -190,16 +190,14 @@ function navigate(viewId) {
 
 function renderizarListaStock(categorias, productos) {
     const container = document.getElementById('contenedor-stock-list');
-    container.innerHTML = ''; // Limpiar previo
+    container.innerHTML = ''; 
 
     categorias.forEach(cat => {
-        // Título de la categoría
         const tituloCat = document.createElement('h3');
         tituloCat.textContent = cat.nombre;
         tituloCat.style.textAlign = 'center';
         container.appendChild(tituloCat);
 
-        // Filtrar productos de esta categoría
         const prods = productos.filter(p => p.categoria_id === cat.id);
         
         prods.forEach(prod => {
@@ -213,6 +211,8 @@ function renderizarListaStock(categorias, productos) {
                     $ <input type="number" class="stock-input" value="${prod.precio}" 
                              onchange="actualizarProducto(${prod.id}, 'precio', this.value)">
                 </div>
+                <!-- BOTÓN DE ELIMINAR -->
+                <button onclick="eliminarProducto(${prod.id})" style="background-color: #ff4c4c; color: white; border: none; padding: 8px 12px; cursor: pointer; margin-left: 10px; font-weight: bold; border-radius: 4px;">X</button>
             `;
             container.appendChild(fila);
         });
@@ -271,4 +271,61 @@ async function actualizarProducto(id, campo, valor) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ campo, valor })
     });
+}
+// --- NUEVAS FUNCIONES DE STOCK Y PROMOS ---
+
+async function eliminarProducto(id) {
+    if (!confirm('¿Seguro que deseas eliminar este producto/promo del sistema?')) return;
+    
+    await fetch(`${API_URL}/api/productos/${id}`, {
+        method: 'DELETE'
+    });
+    cargarVistaStock(); // Recarga la lista para que desaparezca
+}
+
+async function crearPromo() {
+    const nombre = prompt("Nombre de la promoción (Ej: Promo 2 Jugos + Galleta):");
+    if (!nombre) return;
+    
+    const precio = prompt("Precio total al que se venderá la promoción:");
+    if (!precio) return;
+
+    let componentes = [];
+    let agregando = true;
+    
+    // Obtenemos la lista actual de productos para mostrársela al usuario
+    const res = await fetch(`${API_URL}/api/stock-completo`);
+    const data = await res.json();
+    const listaProds = data.productos.map(p => `${p.id}: ${p.nombre}`).join('\n');
+
+    while(agregando) {
+        const prodId = prompt(`Ingresa el NÚMERO del producto para añadir a la promo (deja vacío cuando termines):\n\n${listaProds}`);
+        
+        if (!prodId) {
+            if (componentes.length >= 2) {
+                agregando = false; // Termina de agregar
+            } else {
+                alert("Una promo debe tener al menos 2 productos. Operación cancelada.");
+                return;
+            }
+        } else {
+            const cant = prompt(`¿Qué CANTIDAD de este producto incluye la promo?`);
+            if(cant) componentes.push({ id: parseInt(prodId), cantidad: parseInt(cant) });
+        }
+    }
+
+    try {
+        await fetch(`${API_URL}/api/promos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                nombre, 
+                precio: parseFloat(precio), 
+                componentes 
+            })
+        });
+        alert("¡Promoción creada exitosamente!");
+    } catch (error) {
+        alert("Error al crear la promo");
+    }
 }

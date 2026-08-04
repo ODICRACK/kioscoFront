@@ -17,6 +17,8 @@
             <button onclick="navigate('view-catalogo')">Catálogo</button>
             <button onclick="navigate('view-stock')">Stock</button>
             <button onclick="navigate('view-venta')">Ventas</button>
+            <button onclick="crearPromo()" style="background-color: #9c27b0; color: white; border: none;">Promos</button>
+</div>
         </div>
     </div>
 
@@ -62,28 +64,32 @@
             <button onclick="setShift('manana')">Mañana</button>
             <button onclick="setShift('tarde')">Tarde</button>
             <button onclick="setShift('noche')">Noche</button>
+            <button onclick="limpiarVenta()"
+                style="background-color: #ff4c4c; color: white; border: none; font-weight: bold;">Limpiar
+                Carrito</button>
+        </div>
+    </div>
+
+    <div class="pos-layout">
+        <div class="categorias-col" id="categorias-container">
+            <!-- Categorías dinámicas -->
         </div>
 
-        <div class="pos-layout">
-            <div class="categorias-col" id="categorias-container">
-                <!-- Categorías dinámicas -->
-            </div>
-
-            <div class="productos-col" id="productos-container">
-                <!-- Productos dinámicos -->
-            </div>
+        <div class="productos-col" id="productos-container">
+            <!-- Productos dinámicos -->
         </div>
+    </div>
 
-        <div class="footer-venta">
-            <div class="pagos">
-                <button id="btn-transferencia" onclick="setMetodoPago('transferencia')">Transfe</button>
-                <button id="btn-efectivo" onclick="setMetodoPago('efectivo')">Efectivo</button>
-            </div>
-            <div class="total-display">
-                $<span id="total-monto">0</span>
-            </div>
-            <button class="btn-venta-final" onclick="procesarVenta()">Venta</button>
+    <div class="footer-venta">
+        <div class="pagos">
+            <button id="btn-transferencia" onclick="setMetodoPago('transferencia')">Transfe</button>
+            <button id="btn-efectivo" onclick="setMetodoPago('efectivo')">Efectivo</button>
         </div>
+        <div class="total-display">
+            $<span id="total-monto">0</span>
+        </div>
+        <button class="btn-venta-final" onclick="procesarVenta()">Venta</button>
+    </div>
     </div>
 
 
