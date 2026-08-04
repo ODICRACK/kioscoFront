@@ -139,7 +139,7 @@ function limpiarVenta() {
 // --- LÓGICA VISTA CATÁLOGO ---
 async function cargarHistorialVentas() {
     try {
-        const res = await fetch(`${API_URL}}/api/ventas`);
+        const res = await fetch(`${API_URL}/api/ventas`);
         const ventas = await res.json();
         const tbody = document.querySelector('#tabla-ventas tbody');
         tbody.innerHTML = '';
