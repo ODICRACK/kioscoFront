@@ -215,13 +215,24 @@ function filtrarCatalogo() {
 function renderizarTablaVentas(ventas) {
     const tbody = document.querySelector('#tabla-ventas tbody');
     tbody.innerHTML = '';
-
+    
     let totalRecaudado = 0;
+    let totalEfectivo = 0;
+    let totalTransfe = 0;
 
     ventas.forEach(v => {
+        const monto = parseFloat(v.total);
+        
         // Sumar al total general
-        totalRecaudado += parseFloat(v.total);
-
+        totalRecaudado += monto;
+        
+        // Sumar a la cápsula correspondiente
+        if (v.metodo_pago === 'efectivo') {
+            totalEfectivo += monto;
+        } else if (v.metodo_pago === 'transferencia' || v.metodo_pago === 'transfe') {
+            totalTransfe += monto;
+        }
+        
         // Crear la fila
         const tr = document.createElement('tr');
         tr.style.borderBottom = "1px solid #ccc";
@@ -234,8 +245,10 @@ function renderizarTablaVentas(ventas) {
         tbody.appendChild(tr);
     });
 
-    // Actualizar el número verde gigante con el dinero recaudado
+    // Actualizar los números en la pantalla
     document.getElementById('total-recaudado').textContent = totalRecaudado;
+    document.getElementById('total-efectivo').textContent = totalEfectivo;
+    document.getElementById('total-transfe').textContent = totalTransfe;
 }
 
 // --- LÓGICA VISTA STOCK ---

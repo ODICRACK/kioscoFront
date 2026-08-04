@@ -194,7 +194,51 @@ body {
     display: flex;
     gap: 20px;
 }
+/* Contenedor que agrupa el total grande y las cápsulas chicas */
+.recaudacion-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
+.recaudacion-box {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: #b9f6ca;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #000;
+    border: 2px solid #00e676;
+}
+
+/* Columna para las cápsulas chicas */
+.recaudacion-subtotales {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Forma de cápsula */
+.capsula-efectivo, .capsula-transfe {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 20px; /* Bordes bien redondeados para efecto cápsula */
+    color: #000;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.capsula-efectivo {
+    background-color: #c8e6c9; /* Verde más suave para el efectivo */
+    border: 1px solid #81c784;
+}
+
+.capsula-transfe {
+    background-color: #bbdefb; /* Azul claro para transferencias */
+    border: 1px solid #64b5f6;
+}
 .filtros-controles label {
     font-weight: bold;
 }
