@@ -4,7 +4,7 @@ let metodoPagoActual = null;
 let total = 0;
 let datosCatalogo = { categorias: [], productos: [] };
 
-const API_URL = "https://kiosco-backend.onrender.com";
+const API_URL = "https://kioscoback.onrender.com";
 
 // --- NAVEGACIÓN ---
 function navigate(viewId) {
