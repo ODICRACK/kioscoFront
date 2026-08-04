@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Veloz</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="app.js"></script>
+</head>
+
+<body class="shift-manana" id="app-body">
+
+    <!-- VISTA HOME -->
+    <div id="view-home" class="view active">
+        <div class="menu-container">
+            <button onclick="navigate('view-catalogo')">Catálogo</button>
+            <button onclick="navigate('view-stock')">Stock</button>
+            <button onclick="navigate('view-venta')">Ventas</button>
+        </div>
+    </div>
+
+    <!-- VISTA STOCK -->
+    <div id="view-stock" class="view">
+        <button class="btn-back" onclick="navigate('view-home')">←</button>
+        <h2>Gestión de Stock</h2>
+        <!-- Aquí irían los formularios de creación según image_cb073f.png -->
+        <p>Formularios de ingreso de datos...</p>
+    </div>
+
+    <!-- VISTA CATALOGO -->
+    <div id="view-catalogo" class="view">
+        <button class="btn-back" onclick="navigate('view-home')">←</button>
+        <div class="table-container">
+            <table id="tabla-ventas">
+                <thead>
+                    <tr>
+                        <th>Turno</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Medio</th>
+                    </tr>
+                </thead>
+                <tbody><!-- Llenado por JS --></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- VISTA VENTA -->
+    <div id="view-venta" class="view">
+        <button class="btn-back" onclick="navigate('view-home')">←</button>
+
+        <div class="turnos-container">
+            <button onclick="setShift('manana')">Mañana</button>
+            <button onclick="setShift('tarde')">Tarde</button>
+            <button onclick="setShift('noche')">Noche</button>
+        </div>
+
+        <div class="pos-layout">
+            <div class="categorias-col" id="categorias-container">
+                <!-- Categorías dinámicas -->
+            </div>
+
+            <div class="productos-col" id="productos-container">
+                <!-- Productos dinámicos -->
+            </div>
+        </div>
+
+        <div class="footer-venta">
+            <div class="pagos">
+                <button id="btn-transferencia" onclick="setMetodoPago('transferencia')">Transfe</button>
+                <button id="btn-efectivo" onclick="setMetodoPago('efectivo')">Efectivo</button>
+            </div>
+            <div class="total-display">
+                $<span id="total-monto">0</span>
+            </div>
+            <button class="btn-venta-final" onclick="procesarVenta()">Venta</button>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
