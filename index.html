@@ -17,9 +17,10 @@
             <button onclick="navigate('view-catalogo')">Catálogo</button>
             <button onclick="navigate('view-stock')">Stock</button>
             <button onclick="navigate('view-venta')">Ventas</button>
-            <button onclick="crearPromo()" style="background-color: #9c27b0; color: white; border: none;">Promos</button>
-</div>
+            <button onclick="crearPromo()"
+                style="background-color: #9c27b0; color: white; border: none;">Promos</button>
         </div>
+    </div>
     </div>
 
     <!-- VISTA STOCK -->
@@ -61,11 +62,21 @@
         <button class="btn-back" onclick="navigate('view-home')">←</button>
 
         <div class="turnos-container">
-            <button onclick="setShift('manana')">Mañana</button>
-            <button onclick="setShift('tarde')">Tarde</button>
-            <button onclick="setShift('noche')">Noche</button>
+            <!-- NUEVO BOTÓN: Lado Izquierdo -->
+            <button onclick="eliminarUltimo()"
+                style="background-color: #ff9800; color: white; border: none; font-weight: bold; border-radius: 4px;">Deshacer
+                Último</button>
+
+            <!-- TURNOS AGRUPADOS -->
+            <div class="turnos-botones">
+                <button onclick="setShift('manana')">Mañana</button>
+                <button onclick="setShift('tarde')">Tarde</button>
+                <button onclick="setShift('noche')">Noche</button>
+            </div>
+
+            <!-- BOTÓN LIMPIAR: Lado Derecho -->
             <button onclick="limpiarVenta()"
-                style="background-color: #ff4c4c; color: white; border: none; font-weight: bold;">Limpiar
+                style="background-color: #ff4c4c; color: white; border: none; font-weight: bold; border-radius: 4px;">Limpiar
                 Carrito</button>
         </div>
     </div>
