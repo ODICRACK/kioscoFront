@@ -22,10 +22,18 @@
 
     <!-- VISTA STOCK -->
     <div id="view-stock" class="view">
-        <button class="btn-back" onclick="navigate('view-home')">←</button>
-        <h2>Gestión de Stock</h2>
-        <!-- Aquí irían los formularios de creación según image_cb073f.png -->
-        <p>Formularios de ingreso de datos...</p>
+        <div class="stock-header">
+            <button class="btn-back" onclick="navigate('view-home')">←</button>
+            <button class="btn-nuevo" onclick="crearProducto()">Nuevo Produc</button>
+        </div>
+
+        <div id="contenedor-stock-list">
+            <!-- Aquí se renderizarán dinámicamente las categorías y productos -->
+        </div>
+
+        <div class="stock-footer">
+            <button class="btn-nuevo" onclick="crearCategoria()">Nueva categoria</button>
+        </div>
     </div>
 
     <!-- VISTA CATALOGO -->

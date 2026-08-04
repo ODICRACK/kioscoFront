@@ -146,3 +146,101 @@ async function cargarHistorialVentas() {
         console.error("Error al cargar historial", error);
     }
 }
+
+// --- LÓGICA VISTA STOCK ---
+
+// Esta función se debe llamar cuando el usuario navega a la vista stock
+async function cargarVistaStock() {
+    try {
+        // Usamos un endpoint diferente para traer TODO, incluso sin stock
+        const res = await fetch('http://localhost:3000/api/stock-completo');
+        const data = await res.json();
+        renderizarListaStock(data.categorias, data.productos);
+    } catch (error) {
+        console.error("Error al cargar stock", error);
+    }
+}
+
+// Para que se cargue al entrar a la vista, actualiza la función navigate() que ya tenías:
+/* 
+function navigate(viewId) {
+    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    
+    if (viewId === 'view-venta') cargarCatalogo();
+    if (viewId === 'view-catalogo') cargarHistorialVentas();
+    if (viewId === 'view-stock') cargarVistaStock(); // <--- AGREGA ESTA LÍNEA
+}
+*/
+
+function renderizarListaStock(categorias, productos) {
+    const container = document.getElementById('contenedor-stock-list');
+    container.innerHTML = ''; // Limpiar previo
+
+    categorias.forEach(cat => {
+        // Título de la categoría
+        const tituloCat = document.createElement('h3');
+        tituloCat.textContent = cat.nombre;
+        tituloCat.style.textAlign = 'center';
+        container.appendChild(tituloCat);
+
+        // Filtrar productos de esta categoría
+        const prods = productos.filter(p => p.categoria_id === cat.id);
+        
+        prods.forEach(prod => {
+            const fila = document.createElement('div');
+            fila.className = 'stock-row';
+            fila.innerHTML = `
+                <div class="stock-nombre">${prod.nombre}</div>
+                <input type="number" class="stock-input" value="${prod.stock}" 
+                       onchange="actualizarProducto(${prod.id}, 'stock', this.value)">
+                <div class="stock-precio">
+                    $ <input type="number" class="stock-input" value="${prod.precio}" 
+                             onchange="actualizarProducto(${prod.id}, 'precio', this.value)">
+                </div>
+            `;
+            container.appendChild(fila);
+        });
+    });
+}
+
+// Funciones para crear usando prompts nativos (para ser veloces)
+async function crearCategoria() {
+    const nombre = prompt("Nombre de la nueva categoría:");
+    if (!nombre) return;
+    
+    // Asignamos un color aleatorio o predefinido para la categoría
+    const colores = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FFF333'];
+    const color = colores[Math.floor(Math.random() * colores.length)];
+
+    await fetch('http://localhost:3000/api/categorias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, color })
+    });
+    cargarVistaStock(); // Recargar la vista
+}
+
+async function crearProducto() {
+    const catId = prompt("ID de la categoría a la que pertenece (Ej: 1):");
+    const nombre = prompt("Nombre del producto:");
+    const precio = prompt("Precio de venta:");
+    const stock = prompt("Stock inicial:");
+
+    if (!catId || !nombre || !precio) return;
+
+    await fetch('http://localhost:3000/api/productos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoria_id: parseInt(catId), nombre, precio: parseFloat(precio), stock: parseInt(stock) || 0 })
+    });
+    cargarVistaStock();
+}
+
+async function actualizarProducto(id, campo, valor) {
+    await fetch(`http://localhost:3000/api/productos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campo, valor })
+    });
+}

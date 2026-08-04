@@ -46,3 +46,37 @@ body { margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; hei
 .pagos button.selected { border-color: #00e676; background-color: #b9f6ca; color: #000;}
 .total-display { font-size: 2rem; font-weight: bold; }
 .btn-venta-final { background-color: #00e676 !important; color: black !important; font-size: 1.5rem; padding: 15px 40px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+
+/* ESTILOS VISTA STOCK */
+.stock-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.stock-footer { display: flex; justify-content: center; margin-top: 20px; }
+
+.btn-nuevo { 
+    background-color: #d3d3d3; 
+    border: none; 
+    padding: 10px 15px; 
+    font-size: 1rem; 
+    cursor: pointer; 
+}
+
+#contenedor-stock-list h3 { margin: 15px 0 5px 0; }
+
+.stock-row { 
+    display: flex; 
+    align-items: center; 
+    background-color: #d3d3d3; 
+    padding: 10px; 
+    margin-bottom: 5px; 
+}
+
+.stock-nombre { flex: 2; font-size: 1.1rem; }
+.stock-precio { flex: 1; display: flex; align-items: center; justify-content: flex-end; }
+
+.stock-input { 
+    width: 60px; 
+    padding: 5px; 
+    border: none; 
+    text-align: center; 
+    font-size: 1.1rem; 
+    margin: 0 5px;
+}
