@@ -102,7 +102,7 @@ async function procesarVenta() {
     if (!metodoPagoActual) return alert('Selecciona un método de pago');
 
     try {
-        const res = await fetch(`${API_URL}}/api/ventas`, {
+        const res = await fetch(`${API_URL}/api/ventas`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
