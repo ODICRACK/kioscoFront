@@ -80,6 +80,7 @@ body {
 }
 
 .turnos-botones {
+    justify-content: space-around;
     display: flex;
     gap: 10px;
 }
