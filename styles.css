@@ -89,6 +89,7 @@ body {
 .turnos-botones button {
     padding: 6px 12px;
     /* Reducido de 10px 20px */
+    height: 35px;
     font-size: 0.9rem;
     /* Letra ligeramente más pequeña */
 }
